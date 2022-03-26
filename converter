@@ -1,0 +1,20 @@
+import requests
+from datetime import datetime
+import pandas as pd
+import time
+
+while True:
+    try:
+        requisicao = requests.get("https://economia.awesomeapi.com.br/last/USD-BRL,EUR-BRL,BTC-BRL")
+        data_atualização= datetime.now()
+        requisicao_dic = requisicao.json()
+        cotacao_dolar = requisicao_dic["USDBRL"]["bid"]
+        df= pd.DataFrame({'dolar': [cotacao_dolar], 'Última atualização: ':[data_atualização]})
+
+        df.to_excel("c:Users\\User\\documents\\dolar-to-real")
+        #you can change the repository for the one you want to create the file
+        print(f"Cotação Atualizada. {datetime.now()}")
+        time.sleep(60*60)
+    except PermissionError:
+        print('O documento de cotações está aberto, ele deve ser fechado para que a atualização seja feita')
+        time.sleep(60*60)
